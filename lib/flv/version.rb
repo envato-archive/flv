@@ -1,3 +1,3 @@
-module FLV
-  VERSION = "0.0.2"
+class FLV
+  VERSION = "0.1.0"
 end
