@@ -81,6 +81,8 @@ class FLV
       time = @data_reader.read_double_be
       utc_offset_minutes = @data_reader.read_sint16_be
       Time.new(1970, 1, 1, 0, 0, 0, utc_offset_minutes * 60) + time
+    rescue ArgumentError
+      nil
     end
 
     def expect_script_data_string
