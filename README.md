@@ -24,7 +24,27 @@ $ gem install flv
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+flv = FLV.read("path/to/your/video.flv")
+flv.audio? # => true
+flv.video? # => true
+
+data_tag = flv.tags.find { |tag| tag.is_a?(FLV::Tag::Data) }
+data_tag.duration # => 60.0
+data_tag.frame_rate # => 30.0
+```
+
+The FLV gem also supports streaming parsing, so you can handle tags as they arrive from an I/O stream.
+
+This is useful for pulling metadata out of FLV videos without having to download the whole lot:
+
+```ruby
+require "open-uri"
+io = open("http://example.com/path/to/video.flv")
+flv = FLV.new(io)
+data_tag = flv.each_tag.first
+io.close
+```
 
 ## Contributing
 
