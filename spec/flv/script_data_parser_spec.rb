@@ -46,8 +46,8 @@ describe FLV::ScriptDataParser do
       value.should == {}
     end
 
-    it "parses objects as pairs of a 'string value' and a value" do
-      @str = "\x03\x02\x00\x04name\x02\x00\x05value\x00\x00\x09"
+    it "parses objects as pairs of a non-value strings and a value" do
+      @str = "\x03\x00\x04name\x02\x00\x05value\x00\x00\x09"
       value.should == { "name" => "value" }
     end
   end
@@ -66,6 +66,18 @@ describe FLV::ScriptDataParser do
     it "parses arrays as pairs of a non-value string and a value" do
       @str = "\x08\x00\x00\x00\x00\x00\x04name\x02\x00\x05value\x00\x00\x09"
       value.should == { "name" => "value" }
+    end
+  end
+
+  context "strict arrays" do
+    it "parses empty strict arrays" do
+      @str = "\x0a\x00\x00\x00\x00"
+      value.should == []
+    end
+
+    it "parses strict arrays with values" do
+      @str = "\x0a\x00\x00\x00\x03\x02\x00\x03foo\x02\x00\x03bar\x02\x00\x03baz"
+      value.should == ["foo", "bar", "baz"]
     end
   end
 

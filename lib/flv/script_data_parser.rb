@@ -9,7 +9,9 @@ class FLV
     end
 
     def parse
-      read_script_data_objects
+      Hash[until_terminator(TERMINATOR).map {
+        [expect_script_data_string, read_script_data_value]
+      }]
     end
 
     def parse_single_value
@@ -22,7 +24,7 @@ class FLV
       when  0 then read_script_data_number
       when  1 then read_script_data_boolean
       when  2 then read_script_data_string
-      when  3 then read_script_data_objects
+      when  3 then read_script_data_object
       when  4 then read_script_data_movie_clip
       when  5 then read_script_data_null
       when  6 then read_script_data_undefined
@@ -51,9 +53,9 @@ class FLV
 
     TERMINATOR = "\x00\x00\x09".force_encoding("BINARY").freeze
 
-    def read_script_data_objects
+    def read_script_data_object
       Hash[until_terminator(TERMINATOR).map {
-        [expect_script_data_string, read_script_data_value]
+        [read_script_data_string, read_script_data_value]
       }]
     end
 
@@ -70,6 +72,11 @@ class FLV
       [read_script_data_string, read_script_data_value]
     end
 
+    def read_script_data_strict_array
+      count = @data_reader.read_uint32_be
+      count.times.map { read_script_data_value }
+    end
+
     def read_script_data_date
       time = @data_reader.read_double_be
       utc_offset_minutes = @data_reader.read_sint16_be
@@ -78,7 +85,9 @@ class FLV
 
     def expect_script_data_string
       read_script_data_value.tap do |value|
-        raise FormatError, "expected string, have #{value.inspect}" unless value.is_a?(String)
+        unless value.is_a?(String)
+          raise FormatError, "expected string, have #{value.inspect}"
+        end
       end
     end
 
