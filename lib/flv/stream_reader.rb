@@ -40,10 +40,18 @@ class FLV
       read_bytes(2).unpack("S>").first
     end
 
+    def read_sint16_be
+      read_bytes(2).unpack("s>").first
+    end
+
     def read_uint32_weird_endian
       lower = read_uint24_be
       higher = read_byte
       lower | (higher << 24)
+    end
+
+    def read_double_be
+      read_bytes(8).unpack("G").first
     end
   end
 end

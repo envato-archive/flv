@@ -68,4 +68,26 @@ describe FLV::ScriptDataParser do
       value.should == { "name" => "value" }
     end
   end
+
+  context "dates" do
+    it "can parse an empty date" do
+      @str = "\x0b\0\0\0\0\0\0\0\0\0\0"
+      value.should == Time.utc(1970, 1, 1, 0, 0, 0)
+    end
+
+    it "can parse an empty date in UTC+10" do
+      @str = "\x0b\0\0\0\0\0\0\0\0\x02X"
+      value.should == Time.new(1970, 1, 1, 0, 0, 0, 10 * 3600)
+    end
+
+    it "can parse today in UTC+10" do
+      @str = "\x0bA\xD4bB\xDE\x80\0\0\x02X"
+      value.should == Time.new(2013, 5, 7, 14, 11, 6, 10 * 3600)
+    end
+
+    it "can parse today in UTC-10" do
+      @str = "\x0bA\xD4bB\xDE\x80\0\0\xfd\xa8"
+      value.should == Time.new(2013, 5, 7, 14, 11, 6, -10 * 3600)
+    end
+  end
 end

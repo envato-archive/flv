@@ -37,8 +37,7 @@ class FLV
     end
 
     def read_script_data_number
-      # 'G' means double precision big endian floating point number
-      @data_reader.read_bytes(8).unpack("G").first
+      @data_reader.read_double_be
     end
 
     def read_script_data_string
@@ -69,6 +68,12 @@ class FLV
 
     def read_script_data_variable
       [read_script_data_string, read_script_data_value]
+    end
+
+    def read_script_data_date
+      time = @data_reader.read_double_be
+      utc_offset_minutes = @data_reader.read_sint16_be
+      Time.new(1970, 1, 1, 0, 0, 0, utc_offset_minutes * 60) + time
     end
 
     def expect_script_data_string
