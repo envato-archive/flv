@@ -47,7 +47,7 @@ class FLV
     end
 
     def read_script_data_boolean
-      @data_reader.read_byte.nonzero?
+      !@data_reader.read_byte.zero?
     end
 
     TERMINATOR = "\x00\x00\x09".force_encoding("BINARY").freeze

@@ -53,12 +53,12 @@ class FLV
       end
 
       def seek_to_end?
-        !!meta_data["canSeekToEnd"].nonzero?
+        meta_data["canSeekToEnd"]
       end
 
     private
       def meta_data
-        data["onMetaData"]
+        data["onMetaData"] || {}
       end
     end
   end
