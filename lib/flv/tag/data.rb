@@ -6,12 +6,10 @@ require "flv/script_data_parser"
 class FLV
   class Tag
     class Data < Tag
-      attr_reader :data
-
-      def decode_raw_data
-        @data = ScriptDataParser.new(raw_data).parse
+      def data
+        @data ||= ScriptDataParser.new(raw_data).parse
       end
-
+      
       def inspect
         "#<#{self.class} #{data.inspect}>"
       end
