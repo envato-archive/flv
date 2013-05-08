@@ -39,8 +39,6 @@ The FLV gem also supports streaming parsing, so you can handle tags as they arri
 This is useful for pulling metadata out of FLV videos without having to download the whole lot:
 
 ```ruby
-require "open-uri"
-io = open("http://example.com/path/to/video.flv")
 flv = FLV.new(io)
 data_tag = flv.each_tag.first
 io.close
