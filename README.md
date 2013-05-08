@@ -1,6 +1,6 @@
 # FLV
 
-A Ruby library for parsing FLV files.
+A Ruby library for parsing FLV files and metadata sections.
 
 ## Installation
 
