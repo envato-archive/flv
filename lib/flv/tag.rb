@@ -30,15 +30,10 @@ class FLV
     end
 
   private
-    def decode_raw_data
-      # implemented in subclasses
-    end
-
     def read
       read_header
       read_raw_data
       read_footer
-      decode_raw_data
     end
 
     def read_header
